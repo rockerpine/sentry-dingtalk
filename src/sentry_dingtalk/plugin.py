@@ -15,7 +15,7 @@ class DingTalkPlugin(NotificationPlugin):
     """
     Sentry plugin to send error counts to DingTalk.
     """
-    author = 'ansheng'
+    author = 'Rockerpine'
     author_url = 'https://github.com/rockerpine/sentry-dingtalk'
     version = Sentry_DingTalk.VERSION
     description = 'Send error counts to DingTalk.'
@@ -50,20 +50,33 @@ class DingTalkPlugin(NotificationPlugin):
         if group.is_ignored():
             return
 
+        project = event.project
+        level = group.get_level_display().upper()
+        link = group.get_absolute_url()
+        endpoint = self.get_option('endpoint', project)
+        server_name = event.get_tag('server_name')
         access_token = self.get_option('access_token', group.project)
         send_url = DingTalk_API.format(token=access_token)
-        title = u"New alert from {}".format(event.project.slug)
-
+        try:
+            exception = event.get_interfaces()['sentry.interfaces.Exception'].to_string(event)
+            msg = exception.replace('  ', '&emsp;').replace('\n', '</br>')
+        except KeyError:
+            msg = event.error()
         data = {
             "msgtype": "markdown",
             "markdown": {
-                "title": title,
-                "text": u"#### {title} \n > {message} [href]({url})".format(
-                    title=title,
-                    message=event.message,
-                    url=u"{}events/{}/".format(group.get_absolute_url(), event.id),
-                )
-            }
+                "title": '{project_name}:{level}'.format(
+                    project_name=project,
+                    level=level,
+                ),
+                "text": '''## {project_name}@{server_name}:{level}{msg}> [view]({link})'''.format(
+                    project_name=project,
+                    level=level,
+                    msg=msg,
+                    server_name=server_name,
+                    link=link,
+                ),
+            },
         }
         requests.post(
             url=send_url,

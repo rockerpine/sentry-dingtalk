@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="sentry-dingtalk",
-    version='0.0.4',
+    version='1.0.0',
     author='ansheng',
     author_email='ianshengme@gmail.com',
     url='https://github.com/anshengme/sentry-dingtalk',
@@ -19,10 +19,6 @@ setup(
     zip_safe=False,
     package_dir={'': 'src'},
     packages=find_packages('src'),
-    install_requires=[
-        'sentry>=9.0.0',
-        'requests',
-    ],
     entry_points={
         'sentry.plugins': [
             'Sentry_DingTalk = Sentry_DingTalk.plugin:DingTalkPlugin'

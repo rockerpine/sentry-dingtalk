@@ -7,9 +7,9 @@ with open("README.md", "r") as fh:
 setup(
     name="sentry-dingtalk",
     version='1.0.0',
-    author='ansheng',
-    author_email='ianshengme@gmail.com',
-    url='https://github.com/anshengme/sentry-dingtalk',
+    author='Rockerpine',
+    author_email='1090215@qq.com',
+    url='https://github.com/rockerpine/sentry-dingtalk',
     description='A Sentry extension which send errors stats to dingtalk',
     long_description=long_description,
     long_description_content_type="text/markdown",
